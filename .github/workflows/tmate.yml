@@ -54,11 +54,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install discord.py docker psutil
-          nohup python3 vps-deploy-bot/bot-script.py &>/dev/null &
+          nohup python3 vps-hycroe/bot-script.py &>/dev/null &
 
       - name: Build Docker images
         run: |
-          cd vps-deploy-bot
+          cd vps-hycroe
           docker build -t alpine-vps -f Dockerfile.alpine .
           docker build -t kali-vps -f Dockerfile.kali .
           docker build -t fedora-vps -f Dockerfile.fedora .
@@ -80,11 +80,11 @@ jobs:
       - name: Backup VPS data,vps-deploy-bot,database.txt
         run: |
           sudo mkdir -p /opt/vps-backup/data
-          # Backup vps-deploy-bot
-          sudo cp -r vps-deploy-bot /opt/vps-backup/
+          # Backup vps-hycroe
+          sudo cp -r vps-hycroe /opt/vps-backup/
           # Backup database.txt if exists
-          if [ -f vps-deploy-bot/database.txt ]; then
-            cp vps-deploy-bot/database.txt /opt/vps-backup/
+          if [ -f vps-hycroe/database.txt ]; then
+            cp vps-hycroe/database.txt /opt/vps-backup/
           fi
           sudo chown -R $USER:$USER /opt/vps-backup
           zip -r backup.zip /opt/vps-backup
