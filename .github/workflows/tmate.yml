@@ -33,6 +33,10 @@ jobs:
         run: |
           if [ -f ./backup/backup.zip ]; then
             unzip -o ./backup/backup.zip -d /
+            # Restaura o database.txt da pasta backup para o workspace
+            if [ -f /opt/vps-backup/data/database.txt ]; then
+              cp /opt/vps-backup/data/database.txt $GITHUB_WORKSPACE/database.txt
+            fi
           else
             echo "No backup found, starting fresh"
           fi
@@ -73,15 +77,16 @@ jobs:
       - name: Sleep to keep VPS alive
         run: sleep 18000  # 5 hours
 
-      - name: Backup VPS data,vps-deploy-bot,database.txt
+      - name: Backup VPS data and tailscale state
         run: |
           sudo mkdir -p /opt/vps-backup/data
-          # Backup vps-hycroe
-          sudo cp -r vps-hycroe /opt/vps-backup/
-          # Backup database.txt if exists
-          if [ -f vps-hycroe/database.txt ]; then
-            cp vps-hycroe/database.txt /opt/vps-backup/
+          sudo cp /var/lib/tailscale/tailscaled.state /opt/vps-backup/data/
+          
+          # Salvar também o database.txt da raiz
+          if [ -f $GITHUB_WORKSPACE/database.txt ]; then
+            sudo cp $GITHUB_WORKSPACE/database.txt /opt/vps-backup/data/
           fi
+
           sudo chown -R $USER:$USER /opt/vps-backup
           zip -r backup.zip /opt/vps-backup
 
