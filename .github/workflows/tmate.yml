@@ -2,7 +2,7 @@ name: root@apolinario VPS 24/7
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # Every 5 hours
+    - cron: '0 */5 * * *'  # A cada 5 horas
   workflow_dispatch:
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
         run: |
           if [ -f ./backup/backup.zip ]; then
             unzip -o ./backup/backup.zip -d /
-            # Restaura o database.txt da pasta backup para o workspace
+            # Restaurar o database.txt da pasta backup para o workspace
             if [ -f /opt/vps-backup/data/database.txt ]; then
               cp /opt/vps-backup/data/database.txt $GITHUB_WORKSPACE/database.txt
             fi
@@ -75,14 +75,13 @@ jobs:
           cat $HOME/.tmate.sock/ssh
 
       - name: Sleep to keep VPS alive
-        run: sleep 18000  # 5 hours
+        run: sleep 18000  # 5 horas
 
-      - name: Backup VPS data and tailscale state
+      - name: Backup VPS data
         run: |
           sudo mkdir -p /opt/vps-backup/data
-          sudo cp /var/lib/tailscale/tailscaled.state /opt/vps-backup/data/
           
-          # Salvar também o database.txt da raiz
+          # Salvar também o database.txt
           if [ -f $GITHUB_WORKSPACE/database.txt ]; then
             sudo cp $GITHUB_WORKSPACE/database.txt /opt/vps-backup/data/
           fi
