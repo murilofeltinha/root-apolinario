@@ -54,7 +54,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install discord.py docker
-          nohup python3 vps-hycroe/v2.py &>/dev/null &
+          python3 vps-hycroe/v2.py &>/dev/null &
 
       - name: Build Docker images
         run: |
