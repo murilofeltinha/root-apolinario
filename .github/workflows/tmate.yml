@@ -80,14 +80,13 @@ jobs:
       - name: Backup VPS data
         run: |
           sudo mkdir -p /opt/vps-backup/data
-          
           # Salvar também o database.txt
           if [ -f $GITHUB_WORKSPACE/database.txt ]; then
             sudo cp $GITHUB_WORKSPACE/database.txt /opt/vps-backup/data/
           fi
 
-          sudo chown -R $USER:$USER /opt/vps-backup
-          zip -r backup.zip /opt/vps-backup
+          sudo chown -R $USER:$USER /opt/vps-backup.zip
+          -r backup.zip /opt/vps-backup
 
       - name: Upload VPS backup artifact
         uses: actions/upload-artifact@v4
